@@ -15,16 +15,17 @@ const app = require('../app');
 //   console.log("Middleware enabled");
 // }
 
-const PORT = 8080;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
+let currentApp = app;
+
 if (module.hot) {
-  module.hot.accept();
-  // module.hot.accept(['../app'], () => {
-  //   server.removeListener('request', currentApp);
-  //   server.on('request', app);
-  //   currentApp = app;
-  // });
+  module.hot.accept(['../app'], () => {
+    app.removeListener('request', currentApp);
+    app.on('request', app);
+    currentApp = app;
+  });
 }
