@@ -1,7 +1,8 @@
-var express = require('express');
+import express from 'express';
 
-var getTest = require('./routes/getTest');
-var postTest = require('./routes/postTest');
+import getPosts from './routes/getPosts';
+import login from './routes/login';
+import getComments from './routes/getComments';
 
 var app = express();
 
@@ -9,11 +10,14 @@ app.use(express.json());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8080");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 
-app.use('/get', getTest);
-app.use('/login',postTest);
+app.use('/getPosts', getPosts);
+app.use('/login', login);
+app.use('/getComments', getComments);
 
-module.exports = app;
+export default app;

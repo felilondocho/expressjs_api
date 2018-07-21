@@ -1,6 +1,7 @@
-var express = require('express');
-var jwt = require('jsonwebtoken');
-var fetch = require("node-fetch");
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import fetch from 'node-fetch';
+
 var router = express.Router();
 
 router.post('/', function(req, res) {
@@ -11,7 +12,6 @@ router.post('/', function(req, res) {
       if (response.ok) {
         return response.json();
       } else {
-        // throw new Error('Something went wrong');
         res.send("Something went wrong");
         return;
       }
@@ -23,14 +23,13 @@ router.post('/', function(req, res) {
         var token = jwt.sign(tokenData, 'test_password', {
           expiresIn: 60 * 60 * 24 // 24 hours
         });
-        console.log(token);
         res.send(token);
       } else {
         res.status(401).send({
-          error: 'Invalid user'
+          error: 'Invalid user',
         })
       }
     });
 });
 
-module.exports = router;
+export default router;

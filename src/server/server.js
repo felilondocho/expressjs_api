@@ -1,6 +1,4 @@
-
-
-const app = require('../app');
+import app from '../app';
 
 // const isProd = process.env.NODE_ENV === "production";
 // if (!isProd) {
