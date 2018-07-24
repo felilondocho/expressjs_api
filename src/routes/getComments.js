@@ -16,17 +16,14 @@ router.post('/', function(req, res) {
   } else {
     const postId = req.body.postId;
     fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
+    .then(response => Promise.all([response.ok, response.json()]))
+    .then(([responseOk, body]) => {
+      if (responseOk) {
+        res.send(body);
       } else {
-        res.send("Something went wrong");
-        return;
-      }
-    })
-    .then((responseJson) => {
-      res.send(responseJson);
-    })
+        res.status(401).send("Database is down");
+      };
+    });
   }
 });
 

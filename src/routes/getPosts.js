@@ -18,18 +18,15 @@ router.post('/', function(req, res) {
     res.status(401).send({ error: auth.error });
   } else {
     fetch("https://jsonplaceholder.typicode.com/posts")
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
+    .then(response => Promise.all([response.ok, response.json()]))
+    .then(([responseOk, body]) => {
+      if (responseOk) {
+        const responseChunk = body.slice(currentInitChunk,currentEndChunk);
+        res.send(responseChunk);
       } else {
-        res.send("Something went wrong");
-        return;
-      }
-    })
-    .then((responseJson) => {
-      const responseChunk = responseJson.slice(currentInitChunk,currentEndChunk)
-      res.send(responseChunk);
-    })
+        res.status(401).send({error: "Database is down"});
+      };
+    });
   }
 
 });
